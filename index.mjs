@@ -14,7 +14,6 @@ const firebaseConfig = {
     messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.FIREBASE_APP_ID,
 };
-console.log(firebaseConfig);
 // Config from .env file (HIDDEN IN GITHUB)
 
 initializeApp(firebaseConfig);
@@ -55,7 +54,7 @@ var life_time_de_ddos_ip_visited_numbers = {};
 
 app.get('/api/visit', (req, res) => {
     var user_ip = req.headers['x-forwarded-for'] || req.ip || req.connection.remoteAddress ||req.socket.remoteAddress || req.connection.socket.remoteAddress || '';
-    console.log(user_ip);
+    console.log(typeof user_ip);
     try {
         life_time_de_ddos_ip_visited_numbers[user_ip] += 1;
     } catch {}
