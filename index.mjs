@@ -56,7 +56,12 @@ app.get('/api/visit', (req, res) => {
         update(visitRef, {
             session_id: query_session_id,
             time: new Date().getTime(),
-            ip: req.ip,
+            ip: req.headers['x-forwarded-for'] ||
+                req.ip ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress ||
+                '',
             user_agent: req.headers['user-agent'],
             referer: req.headers.referer
         });
