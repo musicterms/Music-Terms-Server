@@ -40,28 +40,33 @@ app.use((req, res, next) => {
     if (cannot_access) {
         return res.status(403).send('403 Forbidden');
     }
+    const user_ip = req.headers['x-forwarded-for'] || req.ip || req.connection.remoteAddress ||req.socket.remoteAddress || req.connection.socket.remoteAddress || '';
+    try {
+        if (life_time_de_ddos_ip_visited_numbers[user_ip] >= 60 * 5) return res.status(429).send('429 Too Many Requests');
+    } catch {}
     next();
 });
 
 // open routes to write on the database.
 
-var life_time_session_ids = []
+var life_time = 60 * 60 * 1000;
+var life_time_session_ids = [];
+var life_time_de_ddos_ip_visited_numbers = {};
 
 app.get('/api/visit', (req, res) => {
+    var user_ip = req.headers['x-forwarded-for'] || req.ip || req.connection.remoteAddress ||req.socket.remoteAddress || req.connection.socket.remoteAddress || '';
+    console.log(user_ip);
+    try {
+        life_time_de_ddos_ip_visited_numbers[user_ip] += 1;
+    } catch {}
     var query_session_id = req.query.session_id;
-    console.log(req.query);
     var visitRef = push(ref(database, 'visit'));
     if (life_time_session_ids.includes(query_session_id)) res.send('OK');
     else {
         update(visitRef, {
             session_id: query_session_id,
             time: new Date().getTime(),
-            ip: req.headers['x-forwarded-for'] ||
-                req.ip ||
-                req.connection.remoteAddress ||
-                req.socket.remoteAddress ||
-                req.connection.socket.remoteAddress ||
-                '',
+            ip: user_ip,
             user_agent: req.headers['user-agent'],
             referer: req.headers.referer
         });
@@ -69,5 +74,10 @@ app.get('/api/visit', (req, res) => {
         res.send('OK');
     }
 });
+
+setInterval(() => {
+    life_time_session_ids = [];
+    life_time_de_ddos_ip_visited_numbers = {};
+}, life_time);
 
 app.listen(port, () => console.log(`Listening on port ${port}.`));
