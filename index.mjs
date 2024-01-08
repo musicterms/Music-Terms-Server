@@ -14,6 +14,7 @@ const firebaseConfig = {
     messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.FIREBASE_API_ID,
 };
+console.log(firebaseConfig);
 // Config from .env file (HIDDEN IN GITHUB)
 
 initializeApp(firebaseConfig);
@@ -48,6 +49,7 @@ var life_time_session_ids = []
 
 app.get('/api/visit', (req, res) => {
     var query_session_id = req.query.session_id;
+    console.log(session_id);
     var visitRef = push(ref(database, 'visit'));
     if (life_time_session_ids.includes(query_session_id)) res.send('OK');
     else {
