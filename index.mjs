@@ -54,8 +54,9 @@ var life_time_de_ddos_ip_visited_numbers = {};
 
 app.get('/api/visit', (req, res) => {
     var user_ip = req.headers['x-forwarded-for'] || req.ip || req.connection.remoteAddress ||req.socket.remoteAddress || req.connection.socket.remoteAddress || '';
-    console.log(typeof user_ip);
     try {
+        try {
+        } catch {}
         life_time_de_ddos_ip_visited_numbers[user_ip] += 1;
     } catch {}
     var query_session_id = req.query.session_id;
