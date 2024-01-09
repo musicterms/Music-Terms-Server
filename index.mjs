@@ -125,13 +125,19 @@ app.get('/api/check-verify', (req, res) => {
         "api_pass_app": process.env.RANDOM_API_PASS_APP,
     }
     var query_string = Object.keys(query).map(key => key + '=' + query[key]).join('&');
-    fetch(random_api_url + 'verify?token=' + token + '&answer=' + answer + '&' + query_string)
+    fetch(random_api_url + 'verify?token=' + token + '&answer=' + answer + '&' + query_string,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }, mode: 'no-cors',
+        })
         .then(response => {
             return response.json();
         }).then(json => {
             res.json(json);
         });
-    
+
     var visitRef = push(ref(database, 'bugs'));
     update(visitRef, {
         session_id: session_id,
