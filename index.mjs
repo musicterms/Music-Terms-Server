@@ -84,7 +84,7 @@ setInterval(() => {
 }, life_time);
 
 // random api
-var random_api_url = port == 5000 ? 'http://localhost:1375/' : process.env.RANDOM_API_URL;
+var random_api_url = process.env.RANDOM_API_URL;
 app.get('/api/verify/', (req, res) => {
     res.set({
         "Content-Type": "application/json",
