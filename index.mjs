@@ -153,4 +153,9 @@ app.get('/api/check-verify', (req, res) => {
     });
 });
 
+app.get('/rondo-fetch', (req, res) => {
+    fetch( random_api_url + '/rondo-fetch?back_url=https://musicterms.onrender.com/rondo-fetch');
+    res.send('OK');
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}.`));
