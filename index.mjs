@@ -86,10 +86,6 @@ setInterval(() => {
 // random api
 var random_api_url = process.env.RANDOM_API_URL;
 app.get('/api/verify/', (req, res) => {
-    res.set({
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-    });
     var access_sub_link = "res/json";
     var access_link = random_api_url + access_sub_link;
     var query = {
